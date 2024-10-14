@@ -46,7 +46,7 @@ export default defineComponent({
   },
   data() {
     return {
-      sortColumn: 0,
+      sortColumn: -1,
       sortOrder: "desc",
     };
   },
@@ -58,6 +58,9 @@ export default defineComponent({
       return this.rows[0] || [];
     },
     sortedData() {
+      if (this.sortColumn === -1) {
+        return this.rows.slice(1);
+      }
       const data = this.rows.slice(1).sort((as, bs) => {
         const [a, b] = [as[this.sortColumn], bs[this.sortColumn]];
         if (this.isNumeric(a)) {
