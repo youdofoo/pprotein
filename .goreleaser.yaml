@@ -1,3 +1,4 @@
+version: 2
 before:
   hooks:
     - go mod tidy
@@ -36,4 +37,4 @@ archives:
 checksum:
   disable: true
 changelog:
-  skip: true
+  disable: true
