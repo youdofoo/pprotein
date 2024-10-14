@@ -18,10 +18,6 @@
             <div v-if="isNumeric(value)" class="numericCell">
               {{ value }}
             </div>
-            <details v-else-if="value.length > 24">
-              <summary>{{ value.slice(0, 24) }} ...</summary>
-              {{ value }}
-            </details>
             <div v-else>{{ value }}</div>
           </td>
         </tr>
