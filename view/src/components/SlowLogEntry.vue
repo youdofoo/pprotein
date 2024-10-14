@@ -29,3 +29,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped lang="scss">
+:deep(th) {
+  font-size: 75%;
+}
+</style>

@@ -105,6 +105,14 @@ table {
   border-collapse: collapse;
 }
 
+table tr:nth-child(odd) td {
+  background-color: #f0f0f0;
+}
+
+thead {
+  background-color: rgb(150, 196, 241);
+}
+
 td,
 th {
   padding: 0.5em 1em;
