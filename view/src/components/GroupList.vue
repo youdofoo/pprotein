@@ -21,7 +21,7 @@
       :key="group"
       :open="i === 0 || openAll"
     >
-      <summary>Group: {{ group }}</summary>
+      <summary>Group: {{ group }} | {{ $store.getters.memoLabelsByGroup(group).join(", ") }}</summary>
       <GroupEntriesTable
         :group-id="group"
         :entries="$store.getters.entriesByGroup(group)"

@@ -156,5 +156,11 @@ export default createStore({
         .entriesByGroup(groupId)
         .filter((e: Entry) => e.Status == "ok");
     },
+    memoLabelsByGroup: (state) => (groupId: string) => {
+      return Object.values(state.entries)
+        .filter((e) => e.Snapshot.GroupId == groupId)
+        .filter((e) => e.Snapshot.Type == "memo")
+        .map((e) => e.Snapshot.Label);
+    }
   },
 });
