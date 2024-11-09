@@ -161,6 +161,18 @@ export default createStore({
         .filter((e) => e.Snapshot.GroupId == groupId)
         .filter((e) => e.Snapshot.Type == "memo")
         .map((e) => e.Snapshot.Label);
-    }
+    },
+    datetimeByGroup:  (state) => (groupId: string) => {
+      const entries = Object.values(state.entries)
+        .filter((e) => e.Snapshot.GroupId == groupId)
+      return entries ? entries[0].Snapshot.Datetime : null;
+    },
+    repositoryByGroup: (state) => (groupId: string) => {
+      const entries = Object.values(state.entries)
+        .filter((e) => e.Snapshot.GroupId == groupId)
+        .filter((e) => e.Snapshot.Repository != undefined)
+        .map((e) => e.Snapshot.Repository)
+      return entries ? entries[0] : null;
+    },
   },
 });
