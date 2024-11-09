@@ -37,4 +37,4 @@ archives:
 checksum:
   disable: true
 changelog:
-  disable: true
+  use: github-native
