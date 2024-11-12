@@ -1,8 +1,8 @@
 # --------------------------------------------------
+ARG GO_VERSION=1.23.3
+FROM golang:${GO_VERSION} AS pprotein
 
-FROM golang:alpine AS pprotein
-
-RUN apk add npm make
+RUN apt update && apt install -y npm make
 
 WORKDIR $GOPATH/src/app
 COPY . .
@@ -11,22 +11,21 @@ RUN make build
 
 # --------------------------------------------------
 
-FROM golang:alpine AS alp
+FROM golang:${GO_VERSION} AS alp
 
 RUN go install github.com/tkuchiki/alp/cmd/alp@latest
 
 # --------------------------------------------------
 
-FROM golang:alpine AS slp
+FROM golang:${GO_VERSION} AS slp
 
-RUN apk add gcc musl-dev
 RUN go install github.com/tkuchiki/slp/cmd/slp@latest
 
 # --------------------------------------------------
 
-FROM alpine
+FROM debian:bookworm-slim
 
-RUN apk add --no-cache graphviz
+RUN apt update && apt install -y graphviz percona-toolkit
 
 COPY --from=pprotein /go/src/app/pprotein /usr/local/bin/
 COPY --from=pprotein /go/src/app/pprotein-agent /usr/local/bin/

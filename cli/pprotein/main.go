@@ -9,6 +9,7 @@ import (
 	"github.com/kaz/pprotein/internal/collect/group"
 	"github.com/kaz/pprotein/internal/event"
 	"github.com/kaz/pprotein/internal/extproc/alp"
+	"github.com/kaz/pprotein/internal/extproc/pt"
 	"github.com/kaz/pprotein/internal/extproc/slp"
 	"github.com/kaz/pprotein/internal/memo"
 	"github.com/kaz/pprotein/internal/pprof"
@@ -82,6 +83,20 @@ func start() error {
 		return err
 	}
 	if err := slpHandler.Register(api.Group("/slowlog")); err != nil {
+		return err
+	}
+
+	ptOpts := &collect.Options{
+		Type:     "pt",
+		Ext:      "-pt.log",
+		Store:    store,
+		EventHub: hub,
+	}
+	ptHandler, err := pt.NewHandler(ptOpts, store)
+	if err != nil {
+		return err
+	}
+	if err := ptHandler.Register(api.Group("/pt")); err != nil {
 		return err
 	}
 
