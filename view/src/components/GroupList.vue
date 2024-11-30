@@ -21,7 +21,7 @@
       :key="group"
       :open="i === 0 || openAll"
     >
-      <summary>{{ $store.getters.datetimeByGroup(group).toLocaleString('ja-JP', { hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: '+09:00' }) }} | {{ $store.getters.repositoryByGroup(group)?.Ref.split("/")[2] }} | {{ $store.getters.memoLabelsByGroup(group).join(", ") }}</summary>
+      <summary>{{ $store.getters.datetimeByGroup(group).toLocaleString('ja-JP', { hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: '+09:00' }) }} | {{ $store.getters.repositoryByGroup(group)?.Ref.split("/").slice(2).join("/") }} | {{ $store.getters.memoLabelsByGroup(group).join(", ") }}</summary>
       <GroupEntriesTable
         :group-id="group"
         :entries="$store.getters.entriesByGroup(group)"
