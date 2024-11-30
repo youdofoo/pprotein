@@ -34,6 +34,11 @@ interface SettingRecord {
   value: string;
 }
 
+interface Score {
+  groupId: string;
+  score: number;
+}
+
 export interface Config extends Omit<SnapshotTarget, "GroupId"> {
   Type: string;
 }
@@ -42,6 +47,7 @@ const state = {
   endpoints: ["memo", "pprof", "httplog", "slowlog", "pt"],
   groups: [] as string[],
   entries: {} as { [key: string]: Entry },
+  scores: {} as { [key: string]: Score },
 
   settingKeys: ["group/targets", "httplog/config", "slowlog/config", "pt/config"],
   settings: {} as { [key: string]: SettingRecord },
@@ -75,9 +81,22 @@ const syncSettingsPlugin = (store: Store<typeof state>) => {
   });
 };
 
+const syncScoresPlugin = async (store: Store<typeof state>) => {
+  const resp = await fetch(`/api/score`);
+  if (!resp.ok) {
+    return alert(
+      `http error: status=${resp.status}, message=${await resp.text()}`
+    );
+  }
+  const scores = (await resp.json()) as Score[];
+  scores.forEach((s) => {
+    store.commit("saveScore", s)
+  });
+}
+
 export default createStore({
   state,
-  plugins: [syncEntriesPlugin, syncSettingsPlugin],
+  plugins: [syncEntriesPlugin, syncSettingsPlugin, syncScoresPlugin],
   mutations: {
     saveEntry(state, entry: Entry) {
       entry.Snapshot.Datetime = new Date(entry.Snapshot.Datetime);
@@ -94,6 +113,9 @@ export default createStore({
     saveSetting(state, record: SettingRecord) {
       state.settings[record.key] = record;
     },
+    saveScore(state, score: Score) {
+      state.scores[score.groupId] = score;
+    }
   },
   actions: {
     async fetchEntries(store, { endpoint }: { endpoint: string }) {

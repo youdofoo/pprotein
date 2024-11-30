@@ -21,11 +21,12 @@
       :key="group"
       :open="i === 0 || openAll"
     >
-      <summary>{{ $store.getters.datetimeByGroup(group).toLocaleString('ja-JP', { hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: '+09:00' }) }} | {{ $store.getters.repositoryByGroup(group)?.Ref.split("/").slice(2).join("/") }} | {{ $store.getters.memoLabelsByGroup(group).join(", ") }}</summary>
+      <summary>{{ $store.getters.datetimeByGroup(group).toLocaleString('ja-JP', { hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: '+09:00' }) }} | {{ $store.getters.repositoryByGroup(group)?.Ref.split("/").slice(2).join("/") }} | score: {{ scores[group]?.score }}</summary>
       <GroupEntriesTable
         :group-id="group"
         :entries="$store.getters.entriesByGroup(group)"
       />
+      <Score :group-id="group" :initialValue="scores[group]?.score.toString()"/>
       <AddMemo :group-id="group" />
     </details>
     <div v-if="!$store.state.groups.length">No entries!!</div>
@@ -36,11 +37,13 @@
 import { defineComponent } from "vue";
 import GroupEntriesTable from "./GroupEntriesTable.vue";
 import AddMemo from "./AddMemo.vue";
+import Score from "./Score.vue";
 
 export default defineComponent({
   components: {
     GroupEntriesTable,
     AddMemo,
+    Score,
   },
   data() {
     return {
@@ -51,6 +54,9 @@ export default defineComponent({
     url() {
       return `${location.origin}/api/group/collect`;
     },
+    scores() {
+      return this.$store.state.scores;
+    }
   },
   methods: {
     async collect() {

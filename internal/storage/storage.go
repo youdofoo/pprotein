@@ -10,6 +10,7 @@ type (
 		Put(typ, id string, data []byte) error
 		Get(typ, id string) ([]byte, error)
 		GetAll(typ string) ([][]byte, error)
+		GetAllMap(typ string) (map[string][]byte, error)
 		Exists(typ, id string) (bool, error)
 		Delete(typ, id string) error
 	}

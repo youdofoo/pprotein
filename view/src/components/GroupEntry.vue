@@ -6,7 +6,7 @@
         :to="`/group/${$route.params.gid}/index/`"
         custom
       >
-        <div :class="{ active: isActive }" @click="navigate">index</div>
+        <div :class="{ active: isActive }" @click="navigate">index (score: {{ score }})</div>
       </router-link>
       <router-link
         v-for="entry in $store.getters.availableEntriesByGroup(
@@ -25,6 +25,19 @@
     <router-view />
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  computed: {
+    score() {
+      const groupId = typeof(this.$route.params.gid) === "string" ? this.$route.params.gid : this.$route.params.gid[0];
+      return this.$store.state.scores[groupId]?.score;
+    }
+  },
+});
+</script>
 
 <style scoped lang="scss">
 .container {

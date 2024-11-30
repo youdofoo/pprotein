@@ -64,6 +64,23 @@ func (s *kvStore) GetAll(typ string) (resp [][]byte, err error) {
 	})
 	return resp, err
 }
+func (s *kvStore) GetAllMap(typ string) (resp map[string][]byte, err error) {
+	err = s.db.View(func(tx *bbolt.Tx) error {
+		resp = make(map[string][]byte, 0)
+
+		bucket := tx.Bucket([]byte(typ))
+		if bucket == nil {
+			return nil
+		}
+
+		bucket.ForEach(func(k, v []byte) error {
+			resp[string(k)] = v
+			return nil
+		})
+		return nil
+	})
+	return resp, err
+}
 func (s *kvStore) Exists(typ, id string) (exists bool, err error) {
 	err = s.db.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket([]byte(typ))

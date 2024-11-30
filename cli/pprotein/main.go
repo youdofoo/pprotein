@@ -13,6 +13,7 @@ import (
 	"github.com/kaz/pprotein/internal/extproc/slp"
 	"github.com/kaz/pprotein/internal/memo"
 	"github.com/kaz/pprotein/internal/pprof"
+	"github.com/kaz/pprotein/internal/score"
 	"github.com/kaz/pprotein/internal/storage"
 	"github.com/kaz/pprotein/view"
 	"github.com/labstack/echo/v4"
@@ -115,6 +116,12 @@ func start() error {
 		return err
 	}
 	grp.RegisterHandlers(api.Group("/group"))
+
+	scoreGrp := api.Group("/score")
+	scoreHandler := score.NewHandler(store)
+	scoreGrp.GET("", scoreHandler.GetAll)
+	scoreGrp.GET("/:groupid", scoreHandler.GetByID)
+	scoreGrp.PUT("/:groupid", scoreHandler.Put)
 
 	return e.Start(":" + port)
 }
