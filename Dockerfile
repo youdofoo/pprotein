@@ -25,7 +25,7 @@ RUN go install github.com/tkuchiki/slp/cmd/slp@latest
 
 FROM debian:bookworm-slim
 
-RUN apt update && apt install -y graphviz percona-toolkit
+RUN apt update && apt install -y graphviz percona-toolkit pgbadger
 
 COPY --from=pprotein /go/src/app/pprotein /usr/local/bin/
 COPY --from=pprotein /go/src/app/pprotein-agent /usr/local/bin/

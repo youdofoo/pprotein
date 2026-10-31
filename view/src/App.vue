@@ -19,6 +19,9 @@
       <router-link v-slot="{ navigate, isActive }" to="/pt/" custom>
         <div :class="{ active: isActive }" @click="navigate">pt</div>
       </router-link>
+      <router-link v-slot="{ navigate, isActive }" to="/pgbadger/" custom>
+        <div :class="{ active: isActive }" @click="navigate">pgbadger</div>
+      </router-link>
       <router-link v-slot="{ navigate, isActive }" to="/setting/" custom>
         <div :class="{ active: isActive }" @click="navigate">setting</div>
       </router-link>

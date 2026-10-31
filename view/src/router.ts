@@ -8,6 +8,7 @@ import PProfEntry from "./components/PProfEntry.vue";
 import SettingList from "./components/SettingList.vue";
 import SlowLogEntry from "./components/SlowLogEntry.vue";
 import PtEntry from "./components/PtEntry.vue";
+import PgBadgerEntry from "./components/PgBadgerEntry.vue";
 import MemoEntry from "./components/MemoEntry.vue";
 
 export default createRouter({
@@ -61,6 +62,13 @@ export default createRouter({
           component: PtEntry,
           meta: {
             title: "pt:{{id}} | group:{{gid}}",
+          },
+        },
+        {
+          path: "pgbadger/:id/",
+          component: PgBadgerEntry,
+          meta: {
+            title: "pgbadger:{{id}} | group:{{gid}}",
           },
         },
         {
@@ -138,6 +146,23 @@ export default createRouter({
       component: PtEntry,
       meta: {
         title: "pt:{{id}}",
+      },
+    },
+    {
+      path: "/pgbadger/",
+      component: EntryList,
+      meta: {
+        title: "pgbadger",
+      },
+      props: {
+        endpoint: "pgbadger",
+      },
+    },
+    {
+      path: "/pgbadger/:id/",
+      component: PgBadgerEntry,
+      meta: {
+        title: "pgbadger:{{id}}",
       },
     },
     {

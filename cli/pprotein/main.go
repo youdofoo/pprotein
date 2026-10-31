@@ -9,6 +9,7 @@ import (
 	"github.com/kaz/pprotein/internal/collect/group"
 	"github.com/kaz/pprotein/internal/event"
 	"github.com/kaz/pprotein/internal/extproc/alp"
+	"github.com/kaz/pprotein/internal/extproc/pgbadger"
 	"github.com/kaz/pprotein/internal/extproc/pt"
 	"github.com/kaz/pprotein/internal/extproc/slp"
 	"github.com/kaz/pprotein/internal/memo"
@@ -98,6 +99,20 @@ func start() error {
 		return err
 	}
 	if err := ptHandler.Register(api.Group("/pt")); err != nil {
+		return err
+	}
+
+	pgbadgerOpts := &collect.Options{
+		Type:     "pgbadger",
+		Ext:      "-pgbadger.log",
+		Store:    store,
+		EventHub: hub,
+	}
+	pgbadgerHandler, err := pgbadger.NewHandler(pgbadgerOpts, store)
+	if err != nil {
+		return err
+	}
+	if err := pgbadgerHandler.Register(api.Group("/pgbadger")); err != nil {
 		return err
 	}
 
