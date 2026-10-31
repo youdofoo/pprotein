@@ -1,6 +1,6 @@
 <template>
   <section>
-    <iframe :srcdoc="$data.report" sandbox="allow-scripts"></iframe>
+    <iframe v-if="$data.src" :src="$data.src" sandbox="allow-scripts"></iframe>
   </section>
 </template>
 
@@ -10,7 +10,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   data() {
     return {
-      report: "",
+      src: "",
     };
   },
   async created() {
@@ -19,10 +19,22 @@ export default defineComponent({
   async beforeRouteUpdate(route) {
     await this.updateReport(route.params.id);
   },
+  beforeUnmount() {
+    this.revoke();
+  },
   methods: {
+    // srcdoc だと、レポート内の #hash のリンクが親ページの URL に解決されて真っ白になるので、blob URL で表示する
     async updateReport(id: string | string[]) {
       const resp = await fetch(`/api/pgbadger/${id}`);
-      this.report = await resp.text();
+      const blob = new Blob([await resp.text()], { type: "text/html" });
+      this.revoke();
+      this.src = URL.createObjectURL(blob);
+    },
+    revoke() {
+      if (this.src) {
+        URL.revokeObjectURL(this.src);
+        this.src = "";
+      }
     },
   },
 });
